@@ -2,7 +2,6 @@ import { ref, set, get, child } from "firebase/database";
 import { firebaseDatabase } from "../firebase-config.js";
 
 const db = firebaseDatabase;
-let fileData = {};
 
 function newUpload(fileData) {
     const reference = ref(db, 'fileDetails/' + fileData.numericCode);
@@ -12,6 +11,7 @@ function newUpload(fileData) {
 
 async function getDetails(numericCode) {
     const dbRef = ref(db);
+    const fileData = {};
     await get(child(dbRef, `fileDetails/${numericCode}`)).then((snapshot) => {
         if (snapshot.exists()) {
             fileData.url = snapshot.val().downloadURL;
@@ -23,10 +23,7 @@ async function getDetails(numericCode) {
     }).catch((error) => {
         console.error(error);
     });
-}
-
-function getURL() {
     return fileData;
 }
 
-export { newUpload, getDetails, getURL };
+export { newUpload, getDetails, };
